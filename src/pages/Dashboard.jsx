@@ -16,7 +16,6 @@ const navItems = [
   { name: "Add Tour Package", path: "/dashboard/add-package", icon: <PlusCircle size={20} /> },
   { name: "All Tour Packages", path: "/dashboard/all-packages", icon: <Plane size={20} /> },
   { name: "All Blogs", path: "/dashboard/all-blogs", icon: <FileText size={20} /> },
-  { name: "Reports", path: "/dashboard/reports", icon: <BarChart2 size={20} /> },
 ];
 
 const Dashboard = () => {

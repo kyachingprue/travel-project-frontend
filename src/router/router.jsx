@@ -15,7 +15,6 @@ import ErrorPage from "../pages/ErrorPage";
 import AddBlogs from "../pages/AddBlogs";
 import AddPackage from "../pages/AddPackage";
 import Dashboard from "../pages/Dashboard";
-import Reports from "../pages/Reports";
 import AllBlogs from "../pages/AllBlogs";
 import AllPackages from "../pages/AllPackages";
 import OrderSection from "../pages/OrderSection";
@@ -100,10 +99,6 @@ const router = createBrowserRouter([
         path: 'all-blogs',
         element: <AllBlogs></AllBlogs>
       },
-      {
-        path: 'reports',
-        element: <Reports></Reports>
-      }
     ]
   },
   {
