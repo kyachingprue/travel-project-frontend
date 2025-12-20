@@ -14,23 +14,28 @@ const TourPackage = () => {
   const { data: tour = [], isLoading, isError } = useQuery({
     queryKey: ['tours'],
     queryFn: async () => {
-      const res = await axiosPublic.get('/tours')
-      return res.data;
+      const res = await axiosPublic.get('/tours');
+      // Return the array inside the response
+      return res.data?.data || [];
     }
-  })
+  });
 
   if (isLoading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
+
   if (isError) {
-    return <ErrorSpinner />
+    return <ErrorSpinner />;
   }
+
+  // Ensure tour is always an array
+  const toursArray = Array.isArray(tour) ? tour : [];
 
   // Calculate pagination
   const indexOfLastTour = currentPage * toursPerPage;
   const indexOfFirstTour = indexOfLastTour - toursPerPage;
-  const currentTours = tour.slice(indexOfFirstTour, indexOfLastTour);
-  const totalPages = Math.ceil(tour.length / toursPerPage);
+  const currentTours = toursArray.slice(indexOfFirstTour, indexOfLastTour);
+  const totalPages = Math.ceil(toursArray.length / toursPerPage);
 
   // Handle page change
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -39,7 +44,7 @@ const TourPackage = () => {
 
   return (
     <div>
-      <TravelPackage/>
+      <TravelPackage />
       <div className="bg-cyan-800 min-h-screen pb-10">
         {/* Tour Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 py-10">
@@ -50,7 +55,6 @@ const TourPackage = () => {
 
         {/* Pagination */}
         <div className="flex justify-center items-center gap-2 flex-wrap mt-6">
-          {/* Previous Button */}
           <button
             onClick={prevPage}
             disabled={currentPage === 1}
@@ -62,7 +66,6 @@ const TourPackage = () => {
             Prev
           </button>
 
-          {/* Page Numbers */}
           {[...Array(totalPages)].map((_, index) => {
             const page = index + 1;
             return (
@@ -79,7 +82,6 @@ const TourPackage = () => {
             );
           })}
 
-          {/* Next Button */}
           <button
             onClick={nextPage}
             disabled={currentPage === totalPages}

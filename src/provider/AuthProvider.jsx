@@ -19,8 +19,10 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setLoading(true);
+    localStorage.removeItem("access-token"); 
     return signOut(auth);
-  }
+  };
+
 
   const profileUpdate = (profile) => {
     setLoading(true);
@@ -37,15 +39,29 @@ const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
       setUser(currentUser);
-      console.log("user data-->", currentUser);
+
+      if (currentUser?.email) {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/jwt`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email: currentUser.email }),
+        });
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem("access-token", data.token);
+        }
+      } else {
+        localStorage.removeItem("access-token");
+      }
+
       setLoading(false);
-    })
-    return () => {
-      unsubscribe();
-    }
-  }, [])
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <AuthContext.Provider value={authInfo}>
       {children}

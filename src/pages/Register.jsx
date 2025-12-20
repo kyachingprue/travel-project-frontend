@@ -101,11 +101,21 @@ const Register = () => {
         createdAt: new Date(),
       };
 
+      // 3. Save user to MongoDB
       await axiosPublic.post("/users", savedUser);
+
+      // 4. Request JWT token from server
+      const jwtRes = await axiosPublic.post("/jwt", {
+        email: data.email,
+      });
+
+      if (jwtRes.data.token) {
+        localStorage.setItem("access-token", jwtRes.data.token);
+      }
 
       toast.success("Account created successfully!");
       setLoading(false);
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       toast.error(err.message || "Registration failed");
       setLoading(false);
